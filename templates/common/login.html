@@ -1,0 +1,24 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>用户登陆</h4></div>
+        <form class="panel-body" action="/login/" method="post">
+            {% csrf_token %}
+            {{ login_form.as_p }}
+            <p><input class="btn btn-default btn-success col-sm-offset-2" type="submit" value="账号登陆"></p>
+            {% if error_message %}
+                <p><span class="error_message col-sm-offset-2">{{ error_message }}</span></p>
+            {% endif %}
+            <input type="hidden" value="{{ next }}" name="next">
+        </form>
+        <p><a class="col-sm-offset-2" href="/reset-password/">忘记密码</a>
+            <a style="margin-left:20px;" href="/register/">注册账号</a></p>
+    </div>
+
+{% endblock %}
+{% block script %}
+    <script>
+
+    </script>
+{% endblock %}

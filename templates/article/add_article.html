@@ -1,0 +1,62 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><h4>新增文章</h4></div>
+    <form class="panel-body" action="/add-article/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label for="article-category">文章类别:</label>
+            <select name="type" id="article-category">
+                    <option value="">请先选择文章类别</option>
+                {% for category in category_list %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <label for="article-type">文章类型:</label>
+            <select name="category" id="article-type">
+
+            </select>
+        </p>
+            {{ obj.as_p }}
+            <input class="col-sm-offset-2 btn btn-default btn-success" type="submit" value="提交">
+    </form>
+</div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(function(){
+            $('#id_title').css('width','600px');
+            $('#article-type').append('<option>请先选择文章类别</option>')
+            $('#article-category').change(function(){
+               categoryid = $(this).val();
+               if(categoryid != ''){
+                   $('#article-type option').remove();
+                   $.ajax({
+                   url:'/getType/',
+                   method:'get',
+                   dataType:'json',
+                   data:{
+                       categoryid:categoryid
+                   },
+                   success:function(data){
+                       addOption(data);
+                   }
+               });
+               }
+           });
+        });
+        function addOption(data){
+            for(var i=0;i<data.length;i++){
+               var fields = data[i].fields
+               var typeid = data[i].pk
+               var name = fields.name
+               $('#article-type').append('<option value='+'typeid+>'+name+'</option>')
+           }
+        }
+    </script>
+{% endblock %}

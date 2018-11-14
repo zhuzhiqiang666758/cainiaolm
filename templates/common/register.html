@@ -1,0 +1,22 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>用户注册</h4></div>
+        <form class="panel-body" action="/register/" method="post">
+            {% csrf_token %}
+            {{ obj.as_p }}
+            <p><input class="btn btn-default btn-success col-sm-offset-2" type="submit" value="提交"></p>
+            {% if error_message %}
+                <p><span class="error_message col-sm-offset-2">{{ error_message }}</span></p>
+            {% endif %}
+            <input type="hidden" value="{{ next }}" name="next">
+        </form>
+    </div>
+
+{% endblock %}
+{% block script %}
+    <script>
+
+    </script>
+{% endblock %}

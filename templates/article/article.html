@@ -1,0 +1,43 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+{% block seo %}
+    <title>{{ article.category }}-{{ article.title }}</title>
+    <meta name="keywords" content="{{ article.category }},{{ article.title }}">
+    <meta name="description" content="{{ article.profile }}">
+{% endblock %}
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>{{ article.title }}</h4></div>
+        <div class="panel-body article-content">
+            {% autoescape off %}
+                {{ article.content }}
+            {% endautoescape %}
+        </div>
+        
+        <div class="panel-heading"><h4>评论</h4></div>
+        <div class="panel-body article-comment">
+            {% autoescape off %}
+                {% for comment in comment_list %}
+                    <ul>
+                        <li>
+                            <hr>
+                            <div class="comment-content">{{ comment.content }}</div>
+                            <p class="comment-info">by <span>{{ comment.created_user.username }} at {{ comment.created_at }}</span></p>
+                        </li>
+                    </ul>
+                {% endfor %}
+            {% endautoescape %}
+        </div>
+        <div id="article-comment-mao"></div>
+        <form class="panel-footer" action="/comment-article" method="get" enctype="multipart/form-data">
+            <input name="article-id" type="hidden" value="{{ article.id }}">
+            {{ comment_form.as_p }}
+            <input class="btn btn-default btn-success" type="submit" value="提交">
+        </form>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $('label[for="id_content"]').addClass('col-sm-12').css({'width':'100%','text-align':'center'});
+    </script>
+{% endblock %}

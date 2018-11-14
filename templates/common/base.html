@@ -1,0 +1,101 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!--自定义css样式引入 -->
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        {% block css %}{% endblock %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+{#        自定义js文件放在jquery后面#}
+        <script src="{% static 'js/base.js' %}"></script>
+        {% block kindeditor %}
+            <script src="{% static 'kindeditor/kindeditor-all-min.js' %}"></script>
+            <script src="{% static 'kindeditor/config.js' %}"></script>
+        {% endblock %}
+
+        {% block seo %}
+            <title>{{ site_name }}</title>
+            <meta name="keywords" content="{{ meta_keywords }}">
+            <meta name="description" content="{{ meta_desp }}">
+        {% endblock %}
+    </head>
+    <body>
+        <div class="my-header navbar navbar-default" role="navigation" style="">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#my-nav">
+                        <span class="sr-only">切换导航</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">菜鸟联盟</a>
+                </div>
+                <div class="collapse navbar-collapse navbar-left" id="my-nav">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/">首页</a></li>
+                        {% for key,type_list in navbar_dict.items %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    {{ key }}<b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    {% for type in type_list %}
+                                        <li><a href="type-{{ type.id }}">{{ type.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                        {% for type in navbar_type_list %}
+                            <li><a href="type-{{ type.id }}">{{ type.name }}</a></li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div><button type="submit" class="btn btn-default">搜索</button>
+                 </form>
+                <div class="navbar navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/add-article">添加文章</a></li>
+                        {% if request.user.is_authenticated %}
+                            <li><a href="">{{ request.user.username }}</a></li>
+                            <li><a href="/logout/">注销</a></li>
+                            {% if request.user.is_superuser %}
+                                <li><a href="/admin/">系统管理</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><a href="/login/">登陆</a></li>
+                            <li><a href="/register/">注册</a></li>
+                        {% endif %}
+                        <li><a href="/about-me/">关于我们</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="left col-sm-2 col-xs-12"></div>
+            <div class="center col-sm-8 col-xs-12">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="right col-sm-2 col-xs-12">
+            </div>
+        </div>
+{#        #这句用来清楚浮动#}
+        <div style="clear: both;"></div>
+        <div class="my-footer"></div>
+    {% block script %}
+    
+    {% endblock %}
+    </body>
+</html>
